@@ -19,10 +19,11 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden; /* Importante para que los corazones no generen scroll */
-            position: relative; /* Para posicionar los corazones absolutos */
+            overflow: hidden; 
+            position: relative;
         }
 
+        /* Contenedor principal de la App */
         .app-container {             
             width: 90%;
             max-width: 360px; 
@@ -32,22 +33,22 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
             border: 2px solid white;
-            position: relative; /* Asegura que el contenido esté sobre los corazones */
-            z-index: 10; /* Mayor que los corazones de fondo */
+            position: relative;
+            z-index: 10;
         }
 
         h1 {
             color: var(--rojo-pasion);
             font-size: 2rem;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             letter-spacing: 2px;
         }
 
-        .heart {
+        .heart-main {
             color: var(--rojo-pasion);
             font-size: 50px;
             animation: heartbeat 1.2s infinite;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         @keyframes heartbeat {
@@ -71,6 +72,7 @@
             display: inline-block;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+            margin-bottom: 30px;
         }
 
         .btn-comenzar:hover {
@@ -78,69 +80,41 @@
             box-shadow: 0 8px 20px rgba(255, 75, 43, 0.6);
         }
 
-        /* Estilos para los corazones flotantes de fondo */
+        /* Corazones flotantes de fondo (Marca de agua) */
         .floating-hearts-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Para que no interfieran con clics */
-            overflow: hidden; /* Asegura que no se salgan del cuerpo */
-            z-index: 0; /* Por debajo del contenido principal */
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 0;
         }
 
         .heart-bg {
             position: absolute;
-            font-size: 20px; /* Tamaño de los corazones */
-            color: rgba(255, 255, 255, 0.5); /* Color blanco semitransparente */
-            opacity: 0; /* Empiezan invisibles */
-            animation: floatAndFade 10s linear infinite;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            animation: floatAndFade 8s linear infinite;
         }
 
-        /* Animación para que floten y se desvanezcan */
         @keyframes floatAndFade {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-                transform: translateY(90vh) scale(0.5);
-            }
-            80% {
-                opacity: 0.2;
-                transform: translateY(20vh) scale(1.2);
-            }
-            100% {
-                transform: translateY(-20vh) scale(1.5);
-                opacity: 0;
-            }
+            0% { transform: translateY(105vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
 
-        /* Retrasos para que los corazones aparezcan en diferentes momentos */
-        .heart-bg:nth-child(2n) { animation-delay: 2s; font-size: 25px; }
-        .heart-bg:nth-child(3n) { animation-delay: 4s; font-size: 18px; }
-        .heart-bg:nth-child(4n) { animation-delay: 6s; font-size: 30px; }
-        .heart-bg:nth-child(5n) { animation-delay: 8s; font-size: 22px; }
-        .heart-bg:nth-child(6n) { animation-delay: 1s; font-size: 28px; }
-        .heart-bg:nth-child(7n) { animation-delay: 3s; font-size: 15px; }
-        .heart-bg:nth-child(8n) { animation-delay: 5s; font-size: 35px; }
-        .heart-bg:nth-child(9n) { animation-delay: 7s; font-size: 19px; }
-        .heart-bg:nth-child(10n) { animation-delay: 9s; font-size: 23px; }
+        /* Posiciones variadas para los corazones de fondo */
+        .heart-bg:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .heart-bg:nth-child(2) { left: 25%; animation-delay: 2s; }
+        .heart-bg:nth-child(3) { left: 45%; animation-delay: 4s; }
+        .heart-bg:nth-child(4) { left: 65%; animation-delay: 1s; }
+        .heart-bg:nth-child(5) { left: 85%; animation-delay: 3s; }
+        .heart-bg:nth-child(6) { left: 15%; animation-delay: 5s; }
 
-        /* Posicionamiento aleatorio inicial (puedes ajustar) */
-        .heart-bg:nth-child(1) { left: 10%; }
-        .heart-bg:nth-child(2) { left: 80%; }
-        .heart-bg:nth-child(3) { left: 30%; }
-        .heart-bg:nth-child(4) { left: 60%; }
-        .heart-bg:nth-child(5) { left: 20%; }
-        .heart-bg:nth-child(6) { left: 70%; }
-        .heart-bg:nth-child(7) { left: 40%; }
-        .heart-bg:nth-child(8) { left: 90%; }
-        .heart-bg:nth-child(9) { left: 5%; }
-        .heart-bg:nth-child(10) { left: 50%; }
-
+        .sticker-img {
+            display: block;
+            margin: 0 auto;
+            border-radius: 15px;
+        }
     </style>
 </head>
 <body>
@@ -152,29 +126,43 @@
         <span class="heart-bg">❤️</span>
         <span class="heart-bg">❤️</span>
         <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
     </div>
 
     <div class="app-container">
-        <div class="heart">❤️</div>
+        <div class="heart-main">❤️</div>
         <h1>¡BIENVENIDA!</h1>
         
-        <p style="color: #666; margin-bottom: 30px;">Tengo algo especial para ti...</p>
+        <p style="color: #666; margin-bottom: 25px;">Tengo algo especial para ti...</p>
         
         <a href="item_o1.html" class="btn-comenzar">COMENZAR</a>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <img src="sticker_01.webp" width="120px">
-        <br>
-        <br>
-        <br>
+        
+        <div class="sticker-wrapper">
+            <br>
+            <br>
+            <br>
+            <br>
+            <img src="sticker_01.webp" id="miSticker" class="sticker-img" width="120">
+            <br>
+            <br>
+            
+        
         </div>
+    </div>
+
+    <script>
+        const sticker = document.getElementById('miSticker');
+        
+        // Esta función "refresca" la imagen para que vuelva a empezar
+        function reiniciarAnimacion() {
+            const rutaLimpia = sticker.src.split('?')[0]; 
+            // Agregamos un parámetro único para obligar al navegador a reiniciar
+            sticker.src = rutaLimpia + '?t=' + new Date().getTime();
+        }
+
+        // AJUSTE AQUÍ: Cambia el 3000 por la duración de tu sticker en milisegundos
+        // Ejemplo: Si el sticker dura 3 segundos, deja 3000.
+        setInterval(reiniciarAnimacion, 3000); 
+    </script>
 
 </body>
 </html>
