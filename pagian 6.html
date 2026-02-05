@@ -1,180 +1,132 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz San Valentín ❤️</title>
-    <style>
-        :root {
-            --rosa-suave: #ffafbd;
-            --rojo-pasion: #ff4b2b;
-            --blanco: #fff0f3;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosotros ❤️</title>
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden; /* Importante para que los corazones no generen scroll */
-            position: relative; /* Para posicionar los corazones absolutos */
-        }
+<style>
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: #9ec9f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-        .app-container {             
-            width: 90%;
-            max-width: 360px; 
-            background: rgba(255, 255, 255, 0.9); 
-            padding: 40px 20px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            text-align: center;
-            border: 2px solid white;
-            position: relative; /* Asegura que el contenido esté sobre los corazones */
-            z-index: 10; /* Mayor que los corazones de fondo */
-        }
+.container {
+    width: 360px;
+    height: 640px;
+    background: #9ec9f5;
+    position: relative;
+    overflow: hidden;
+}
 
-        h1 {
-            color: var(--rojo-pasion);
-            font-size: 2rem;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-        }
+/* Nubes */
+.cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+}
+.cloud1 { width: 120px; height: 40px; top: 40px; left: 20px; }
+.cloud2 { width: 90px; height: 30px; top: 120px; right: 30px; }
 
-        .heart {
-            color: var(--rojo-pasion);
-            font-size: 50px;
-            animation: heartbeat 1.2s infinite;
-            margin-bottom: 20px;
-        }
+/* Marco tipo polaroid */
+.polaroid {
+    background: white;
+    padding: 10px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    position: absolute;
+    border-radius: 6px;
+}
 
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.3); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
-        }
+.polaroid img {
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+}
 
-        .btn-comenzar {
-            background: linear-gradient(to right, #ff4b2b, #ff416c);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
-        }
+.hearts {
+    text-align: center;
+    margin-top: 6px;
+    color: red;
+    font-size: 18px;
+}
 
-        .btn-comenzar:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.6);
-        }
+/* Foto principal */
+.photo-big {
+    width: 220px;
+    top: 80px;
+    left: 70px;
+    transform: rotate(-2deg);
+}
 
-        /* Estilos para los corazones flotantes de fondo */
-        .floating-hearts-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Para que no interfieran con clics */
-            overflow: hidden; /* Asegura que no se salgan del cuerpo */
-            z-index: 0; /* Por debajo del contenido principal */
-        }
+/* Foto pequeña */
+.photo-small {
+    width: 130px;
+    bottom: 150px;
+    right: 30px;
+    transform: rotate(4deg);
+}
 
-        .heart-bg {
-            position: absolute;
-            font-size: 20px; /* Tamaño de los corazones */
-            color: rgba(255, 255, 255, 0.5); /* Color blanco semitransparente */
-            opacity: 0; /* Empiezan invisibles */
-            animation: floatAndFade 10s linear infinite;
-        }
+/* Corazón central */
+.heart {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 70px;
+    background: red;
+    transform: translateX(-50%) rotate(-45deg);
+}
 
-        /* Animación para que floten y se desvanezcan */
-        @keyframes floatAndFade {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-                transform: translateY(90vh) scale(0.5);
-            }
-            80% {
-                opacity: 0.2;
-                transform: translateY(20vh) scale(1.2);
-            }
-            100% {
-                transform: translateY(-20vh) scale(1.5);
-                opacity: 0;
-            }
-        }
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 70px;
+    background: red;
+    border-radius: 50%;
+}
 
-        /* Retrasos para que los corazones aparezcan en diferentes momentos */
-        .heart-bg:nth-child(2n) { animation-delay: 2s; font-size: 25px; }
-        .heart-bg:nth-child(3n) { animation-delay: 4s; font-size: 18px; }
-        .heart-bg:nth-child(4n) { animation-delay: 6s; font-size: 30px; }
-        .heart-bg:nth-child(5n) { animation-delay: 8s; font-size: 22px; }
-        .heart-bg:nth-child(6n) { animation-delay: 1s; font-size: 28px; }
-        .heart-bg:nth-child(7n) { animation-delay: 3s; font-size: 15px; }
-        .heart-bg:nth-child(8n) { animation-delay: 5s; font-size: 35px; }
-        .heart-bg:nth-child(9n) { animation-delay: 7s; font-size: 19px; }
-        .heart-bg:nth-child(10n) { animation-delay: 9s; font-size: 23px; }
+.heart::before {
+    top: -40px;
+    left: 0;
+}
 
-        /* Posicionamiento aleatorio inicial (puedes ajustar) */
-        .heart-bg:nth-child(1) { left: 10%; }
-        .heart-bg:nth-child(2) { left: 80%; }
-        .heart-bg:nth-child(3) { left: 30%; }
-        .heart-bg:nth-child(4) { left: 60%; }
-        .heart-bg:nth-child(5) { left: 20%; }
-        .heart-bg:nth-child(6) { left: 70%; }
-        .heart-bg:nth-child(7) { left: 40%; }
-        .heart-bg:nth-child(8) { left: 90%; }
-        .heart-bg:nth-child(9) { left: 5%; }
-        .heart-bg:nth-child(10) { left: 50%; }
-
-    </style>
+.heart::after {
+    left: 40px;
+    top: 0;
+}
+</style>
 </head>
-<body>
 
-    <div class="floating-hearts-container">
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
+<body>
+<div class="container">
+
+    <!-- Nubes -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+
+    <!-- Foto de ella -->
+    <div class="polaroid photo-big">
+        <img src="foto2.jpg" alt="Ella">
+        <div class="hearts">❤️ ❤️ ❤️</div>
     </div>
 
-    <div class="app-container">
-        <div class="heart">❤️</div>
-        <h1>¡BIENVENIDA!</h1>
-        
-        <p style="color: #666; margin-bottom: 30px;">Tengo algo especial para ti...</p>
-        
-        <a href="item_o1.html" class="btn-comenzar">COMENZAR</a>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <img src="sticker_01.webp" width="120px">
-        <br>
-        <br>
-        <br>
-        </div>
+    <!-- Tu foto -->
+    <div class="polaroid photo-small">
+        <img src="foto1.jpg" alt="Tú">
+        <div class="hearts">❤️ ❤️ ❤️</div>
+    </div>
 
+    <!-- Corazón -->
+    <div class="heart"></div>
+
+</div>
 </body>
 </html>

@@ -11,12 +11,21 @@
             max-width: 360px; 
             margin: auto; 
             background-image: url("img_10.png"); 
-            background-size: 360px;
+            background-size: 100%;
             background-repeat: no repeat;
             background-position: center;
+            background-attachment: ;
             min-height: 100vh; 
         }
     </style>
+<style>
+#audioPlayer {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+</style>
     <title>SAN VALENTIN</title>
     <link rel="shortcut icon" href="amor.png">
 
@@ -26,11 +35,17 @@
         <!-- <img src="img_08.jpeg" width="160px">
    
         <img src="img_09.jpeg" width="160px"> -->
-        <audio controls>
+        <!-- en la parte de arriba estan las imagenes
+          -->
+        <!-- <audio controls> 
         <source src="audio_01.mp3">
-        </audio>
+        </audio> -->
         <a href="item_06.html"><button>next</button></a>
-        <p>mar</p>
     </div>
+<div id="audioPlayer">
+  <audio controls>
+    <source src="audio_01.mp3" type="audio/mpeg">
+  </audio>
+</div>
 </body>
 </html>
