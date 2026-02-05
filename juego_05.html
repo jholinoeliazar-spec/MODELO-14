@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Niebla del Amor - Versión Final</title>
+    <style>
+        :root { --pink: #ffafcc; --crimson: #a4133c; }
+        body { 
+            margin: 0; background: #1a0011; color: white; 
+            font-family: sans-serif; overflow: hidden; touch-action: none;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+        }
+        #ui { width: 300px; display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--pink); font-weight: bold; }
+        canvas { background: #000; border: 2px solid #cdb4db; max-width: 95vw; height: auto; border-radius: 8px; }
+        .controls { display: grid; grid-template-columns: repeat(3, 70px); gap: 10px; margin-top: 15px; }
+        .btn { 
+            width: 70px; height: 70px; background: rgba(255, 175, 204, 0.2); 
+            border: 2px solid var(--pink); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 24px;
+        }
+        .btn:active { background: var(--crimson); }
+        #victory { 
+            position: absolute; background: rgba(0,0,0,0.9); padding: 20px; 
+            border: 2px solid var(--pink); border-radius: 15px; text-align: center; display: none; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui">
+        <span id="t">00:00</span>
+        <span id="h">❤️ 0/5</span>
+    </div>
+
+    <canvas id="g"></canvas>
+
+    <div id="victory">
+        <h2>¡Amor Encontrado! 🐧💖</h2>
+        <p id="vt"></p>
+        <button onclick="location.reload()" style="padding: 10px; background: var(--crimson); color: white; border: none; border-radius: 5px;">Reintentar</button>
+    </div>
+
+    <div class="controls">
+        <div style="grid-column: 2" class="btn" id="up">↑</div>
+        <div style="grid-column: 1" class="btn" id="left">←</div>
+        <div style="grid-column: 2" class="btn" id="down">↓</div>
+        <div style="grid-column: 3" class="btn" id="right">→</div>
+    </div>
+
+<script>
+    const canvas = document.getElementById('g');
+    const ctx = canvas.getContext('2d');
+    const SZ = 15, C = 30; 
+    canvas.width = SZ * C; canvas.height = SZ * C;
+
+    const maze = [
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
+        [1,1,1,0,1,0,1,1,1,1,1,1,1,0,1],
+        [1,0,0,0,0,0,0,0,1,0,0,0,1,0,1],
+        [1,0,1,1,1,1,1,0,1,0,1,0,1,0,1],
+        [1,0,1,0,0,0,1,0,0,0,1,0,0,0,1],
+        [1,0,1,0,1,0,1,1,1,1,1,1,1,1,1],
+        [1,0,0,0,1,0,0,0,0,0,0,0,1,0,1],
+        [1,1,1,1,1,1,1,0,1,1,1,0,1,0,1],
+        [1,0,0,0,0,0,1,0,1,0,0,0,0,0,1],
+        [1,0,1,1,1,0,1,0,1,0,1,1,1,1,1],
+        [1,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
+        [1,1,1,0,1,1,1,1,1,1,1,1,1,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    ];
+
+    let p = { x: 15, y: 45, vx: 0, vy: 0, r: 8, hrts: 0, light: 75 };
+    
+    // CORRECCIÓN FINAL DE CORAZONES (Coordenadas manuales verificadas en el mapa 0)
+    let hearts = [
+        {x: 3*C+15, y: 1*C+15, a:true}, // Camino superior
+        {x: 1*C+15, y: 5*C+15, a:true}, // Pasillo izquierdo libre
+        {x: 7*C+15, y: 3*C+15, a:true}, // Centro arriba
+        {x: 13*C+15, y: 1*C+15, a:true}, // Esquina superior derecha
+        {x: 9*C+15, y: 13*C+15, a:true}  // Cerca del final
+    ];
+
+    let keys = {};
+    let start = Date.now();
+    let win = false;
+
+    const setup = (id, k) => {
+        const b = document.getElementById(id);
+        b.ontouchstart = (e) => { e.preventDefault(); keys[k] = true; };
+        b.ontouchend = (e) => { e.preventDefault(); keys[k] = false; };
+    };
+    setup('up','w'); setup('down','s'); setup('left','a'); setup('right','d');
+    
+    window.onkeydown = (e) => { 
+        if(e.key.includes('Arrow')) keys[e.key[5].toLowerCase()] = true; 
+        else keys[e.key] = true;
+    };
+    window.onkeyup = (e) => {
+        if(e.key.includes('Arrow')) keys[e.key[5].toLowerCase()] = false;
+        else keys[e.key] = false;
+    };
+
+    function isWall(x, y) {
+        let gx = Math.floor(x / C), gy = Math.floor(y / C);
+        if (gx < 0 || gx >= SZ || gy < 0 || gy >= SZ) return true;
+        return maze[gy][gx] === 1;
+    }
+
+    function drawPenguin(x, y, bellyColor, hasBow) {
+        ctx.fillStyle = "black";
+        ctx.beginPath(); ctx.ellipse(x, y, 9, 11, 0, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = bellyColor;
+        ctx.beginPath(); ctx.ellipse(x, y+2, 6, 8, 0, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "white";
+        ctx.beginPath(); ctx.arc(x-2.5, y-4, 1.5, 0, 7); ctx.arc(x+2.5, y-4, 1.5, 0, 7); ctx.fill();
+        ctx.fillStyle = "black";
+        ctx.beginPath(); ctx.arc(x-2.5, y-4, 0.7, 0, 7); ctx.arc(x+2.5, y-4, 0.7, 0, 7); ctx.fill();
+        ctx.fillStyle = "orange";
+        ctx.beginPath(); ctx.moveTo(x-2, y-1); ctx.lineTo(x+2, y-1); ctx.lineTo(x, y+2); ctx.fill();
+        if(hasBow) {
+            ctx.fillStyle = "#ff006e";
+            ctx.beginPath(); ctx.arc(x+5, y-9, 2.5, 0, 7); ctx.arc(x+9, y-9, 2.5, 0, 7); ctx.fill();
+        }
+    }
+
+    function update() {
+        if(win) return;
+        let speed = 2.5;
+        let nextVX = 0, nextVY = 0;
+        if(keys['w'] || keys['u']) nextVY = -speed;
+        if(keys['s'] || keys['d']) nextVY = speed;
+        if(keys['a'] || keys['l']) nextVX = -speed;
+        if(keys['d'] || keys['r']) nextVX = speed;
+
+        if(!isWall(p.x + nextVX + (nextVX > 0 ? p.r : -p.r), p.y)) p.x += nextVX;
+        if(!isWall(p.x, p.y + nextVY + (nextVY > 0 ? p.r : -p.r))) p.y += nextVY;
+
+        hearts.forEach(h => {
+            if(h.a && Math.hypot(p.x-h.x, p.y-h.y) < 15) { h.a = false; p.hrts++; p.light += 25; }
+        });
+
+        if(p.x > 420 && p.y > 400) {
+            win = true;
+            document.getElementById('victory').style.display = 'block';
+            document.getElementById('vt').innerText = "¡Los pingüinos se han reunido!";
+        }
+
+        document.getElementById('t').innerText = Math.floor((Date.now()-start)/1000) + "s";
+        document.getElementById('h').innerText = "❤️ " + p.hrts + "/5";
+    }
+
+    function draw() {
+        ctx.fillStyle = '#1a0011'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = '#4a0e2e';
+        for(let y=0;y<SZ;y++) for(let x=0;x<SZ;x++) if(maze[y][x]) ctx.fillRect(x*C,y*C,C,C);
+
+        drawPenguin(435, 405, "#a2d2ff", false); // Macho Azul
+        drawPenguin(p.x, p.y, "#ffc2d1", true);   // Hembra Rosa
+
+        hearts.forEach(h => { if(h.a) { ctx.font="14px Arial"; ctx.fillText("❤️", h.x-7, h.y+5); }});
+
+        let grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.light);
+        grad.addColorStop(0, 'transparent');
+        grad.addColorStop(1, 'rgba(0,0,0,0.95)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        requestAnimationFrame(() => { update(); draw(); });
+    }
+    draw();
+</script>
+</body>
+</html>
