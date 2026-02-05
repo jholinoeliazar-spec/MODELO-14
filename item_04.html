@@ -26,11 +26,32 @@
             border: 2px solid var(--pink); border-radius: 15px; text-align: center; display: none; z-index: 20;
         }
     </style>
-    <audio autoplay>
-    <source src="audio_02.mp3"></audio>
 </head>
 <body>
+    <!DOCTYPE html>
+<html>
+<head>
+  <title>Mi página</title>
+</head>
 
+<body>
+
+  <!-- AQUÍ copias TODO -->
+  <audio id="musica" src="audio_02.mp3" loop></audio>
+
+  <script>
+  function iniciarAudio() {
+    const audio = document.getElementById("musica");
+    audio.play();
+    document.removeEventListener("click", iniciarAudio);
+    document.removeEventListener("touchstart", iniciarAudio);
+  }
+
+  document.addEventListener("click", iniciarAudio);
+  document.addEventListener("touchstart", iniciarAudio);
+  </script>
+  <!-- FIN -->
+    <!-- ------------------ -->
     <div id="ui">
         <span id="t">00:00</span>
         <span id="h">❤️ 0/5</span>
