@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Love Ordeal - Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-void: #bb1dbb;
+            --blood-red: #ef98ed;
+            --wine: #ff02a7;
+            --romantic-gold: #c5a059;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--dark-void);
+            /* Aura roja de fondo */
+            background: radial-gradient(circle at center, #2a0000 0%, var(--dark-void) 100%);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            color: white;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: white;
+            font-size: 1.8rem;
+            margin: 10px 0;
+            text-shadow: 0 0 10px var(--blood-red);
+            letter-spacing: 2px;
+        }
+
+        /* Temporizador Malévolo */
+        .timer-container {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            border: 2px solid var(--blood-red);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--blood-red);
+            background: rgba(0,0,0,0.5);
+        }
+
+        #timer-text {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--blood-red);
+        }
+
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            max-width: 380px;
+            padding: 10px;
+        }
+
+        .card {
+            width: 90px;
+            height: 90px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--wine);
+            overflow: hidden;
+        }
+
+        .front {
+            background: white;
+            transform: rotateY(180deg);
+        }
+
+        .front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .back {
+            background: linear-gradient(135deg, var(--wine), var(--dark-void));
+            box-shadow: inset 0 0 15px rgba(211, 47, 47, 0.5);
+        }
+
+        .back::after {
+            content: '❣';
+            color: var(--blood-red);
+            font-size: 2rem;
+            text-shadow: 0 0 5px black;
+        }
+
+        /* Pantallas de Finalización */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .overlay h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: transparent;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            border: 1px solid var(--blood-red);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--blood-red);
+            box-shadow: 0 0 20px var(--blood-red);
+        }
+
+        .btn-gold {
+            border-color: var(--romantic-gold);
+            color: var(--romantic-gold);
+        }
+
+        .btn-gold:hover {
+            background: var(--romantic-gold);
+            color: black;
+            box-shadow: 0 0 20px var(--romantic-gold);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>¿Podrás lograrlo?</h1>
+
+    <div class="timer-container">
+        <span id="timer-text">30</span>
+    </div>
+
+    <div class="grid" id="gameGrid"></div>
+
+    <div id="overlayLose" class="overlay">
+        <h2 style="color: var(--blood-red);">EL TIEMPO TE CONSUMIÓ 💔</h2>
+        <p>Tu memoria me ha fallado...</p>
+        <button class="btn" onclick="initGame()">Reintentar el suplicio</button>
+    </div>
+
+    <div id="overlayWin" class="overlay">
+        <h2 style="color: var(--romantic-gold);">PRUEBA SUPERADA ✔</h2>
+        <p>Has demostrado que tu mente me pertenece.</p>
+        <a href="URL_DE_TU_SIGUIENTE_PAGINA.html" class="btn btn-gold">Siguiente Desafío</a>
+    </div>
+
+    <script>
+        const pairsConfig = [
+            { id: 1, img1: 'carta_01.jpeg', img2: 'carta_02.jpeg' },
+            { id: 2, img1: 'carta_03.jpeg', img2: 'carta_04.jpeg' },
+            { id: 3, img1: 'carta_05.jpeg', img2: 'carta_06.jpeg' },
+            { id: 4, img1: 'carta_07.jpeg', img2: 'carta_08.jpeg' },
+            { id: 5, img1: 'carta_09.jpeg', img2: 'carta_10.jpeg' }
+        ];
+
+        let flippedCards = [];
+        let matchedCount = 0;
+        let timeLeft = 30;
+        let timer;
+        let isPlaying = false;
+
+        function initGame() {
+            const grid = document.getElementById('gameGrid');
+            document.getElementById('overlayLose').style.display = 'none';
+            document.getElementById('overlayWin').style.display = 'none';
+            
+            grid.innerHTML = '';
+            flippedCards = [];
+            matchedCount = 0;
+            timeLeft = 30;
+            isPlaying = true;
+            document.getElementById('timer-text').textContent = timeLeft;
+
+            let deck = [];
+            pairsConfig.forEach(p => {
+                deck.push({ id: p.id, img: p.img1 });
+                deck.push({ id: p.id, img: p.img2 });
+            });
+            deck.sort(() => Math.random() - 0.5);
+
+            deck.forEach(data => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="face front"><img src="${data.img}"></div>
+                        <div class="face back"></div>
+                    </div>
+                `;
+                card.onclick = () => flipCard(card, data.id);
+                grid.appendChild(card);
+            });
+
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-text').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame(false);
+                }
+            }, 1000);
+        }
+
+        function flipCard(card, id) {
+            if (!isPlaying || flippedCards.length >= 2 || card.classList.contains('flipped')) return;
+            card.classList.add('flipped');
+            card.dataset.id = id;
+            flippedCards.push(card);
+            if (flippedCards.length === 2) checkMatch();
+        }
+
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            if (c1.dataset.id === c2.dataset.id) {
+                matchedCount++;
+                flippedCards = [];
+                if (matchedCount === 5) endGame(true);
+            } else {
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c2.classList.remove('flipped');
+                    flippedCards = [];
+                }, 800);
+            }
+        }
+
+        function endGame(win) {
+            isPlaying = false;
+            clearInterval(timer);
+            if (win) {
+                document.getElementById('overlayWin').style.display = 'flex';
+            } else {
+                document.getElementById('overlayLose').style.display = 'flex';
+            }
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
