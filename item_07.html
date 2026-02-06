@@ -1,31 +1,219 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi amada Estefani</title>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #222; }
-        .app-container { 
-            width: 100%; 
-            max-width: 360px; 
-            margin: auto; 
-            background: white; 
-            min-height: 100vh; 
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&family=Parisienne&display=swap');
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff0f3;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .titulo-superior {
+            position: absolute;
+            top: 30px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #d00000;
+            z-index: 10;
+        }
+
+        /* SOBRE */
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: #ff4d6d;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 5;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 2;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #c9184a;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 50px;
+            color: #ff0000;
+            transition: 0.3s;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+        }
+
+        /* LA CARTA (OCULTA INICIALMENTE) */
+        .letter-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 85%;
+            max-width: 400px;
+            background: #fdfcf0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            transform: translate(-50%, -50%) scale(0) rotate(15deg); /* Oculta y rotada */
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            text-align: center;
+            border: 1px solid #ffccd5;
+        }
+
+        /* Clase que activa la carta */
+        .letter-modal.active {
+            transform: translate(-50%, -50%) scale(1) rotate(0deg); /* Centrada y visible */
+            opacity: 1;
+        }
+
+        .letter-modal img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #ff4d6d;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .letter-modal h2 {
+            font-family: 'Parisienne', cursive;
+            color: #c9184a;
+            font-size: 2rem;
+            margin: 10px 0;
+        }
+
+        .letter-modal p {
+            line-height: 1.6;
+            color: #444;
+            font-size: 1rem;
+        }
+
+        /* CONTENEDOR DE BOTONES */
+        .botones-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-cerrar, .btn-tu-yo {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .btn-tu-yo {
+            background: #c9184a; /* Un tono un poco más oscuro para diferenciarlo */
+        }
+
+        .btn-cerrar:hover, .btn-tu-yo:hover {
+            background: #d00000;
+        }
+
+        /* Corazones volando de fondo */
+        .bg-heart {
+            position: absolute;
+            color: #ffb3c1;
+            font-size: 20px;
+            animation: move-up 4s linear infinite;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes move-up {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
     </style>
-    <title>SAN VALENTIN</title>
-    <link rel="shortcut icon" href="amor.png"> 
-    <link rel="stylesheet" href="item_04.css">
 </head>
 <body>
-    <div class="app-container">
-        <h2><EM>QUERIDA ESTEFANI</h2>
-    <img src="img_06.jpeg" width="200px">
-    <p>Feliz cumpleaños, amor mío 🎂❤️ Aunque estés lejos por tu trabajo, te siento siempre cerca. Te quiero muchísimo y te admiro por la mujer fuerte y apasionada que eres, y por el corazón tan bonito que tienes como profesora. Me haces sentir orgullo cada día. Tal vez hoy no pueda estar a tu lado, pero eso no significa que no quiera ir a verte; al contrario, sí quiero y lo haré. Aquí te espero —y te voy— con todo mi amor, hoy y siempre. 💫
-</p>
-    <img src="img_05.jpeg" width="140">
-    <a href="item_05.html"><button>Hey go</button></a>
+
+    <div class="titulo-superior">¡Feliz San Valentín! ❤️</div>
+
+    <div class="envelope-wrapper" id="envelope">
+        <div class="heart-seal">❤️</div>
     </div>
+
+    <div class="letter-modal" id="letterModal">
+        <img src="https://i.ibb.co/L519V1L/estefani-bw.jpg" alt="Estefani">
+        <h2>Para Estefani</h2>
+        <p>
+            <b>Mi vida,</b><br>
+            Quería darte una sorpresa especial. Gracias por ser la razón de mi felicidad y por iluminar cada uno de mis días. 
+        </p>
+        <p style="font-family: 'Dancing Script'; font-size: 1.5rem; color: #d00000;">
+            Te amo hoy y siempre.
+        </p>
+        
+        <div class="botones-container">
+            <button class="btn-cerrar" id="closeBtn">Cerrar carta</button>
+            <a href="item_08.html" class="btn-tu-yo">Tú y Yo</a>
+        </div>
+    </div>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const modal = document.getElementById('letterModal');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // Al presionar el sobre/corazón
+        envelope.addEventListener('click', () => {
+            modal.classList.add('active'); // Muestra la carta al centro
+            envelope.style.opacity = '0';  // Esconde el sobre para que no estorbe
+            envelope.style.pointerEvents = 'none';
+        });
+
+        // Al presionar cerrar
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            envelope.style.opacity = '1';
+            envelope.style.pointerEvents = 'auto';
+        });
+
+        // Generador de corazones flotantes
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerText = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+        setInterval(createHeart, 300);
+    </script>
 </body>
 </html>
-

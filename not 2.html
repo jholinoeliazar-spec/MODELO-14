@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi amada Estefani</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400&display=swap');
+
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.2);
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid #333;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 2s ease-in;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #ff2e63;
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #e0e0e0;
+        }
+
+        .highlight {
+            color: #ff2e63;
+            font-weight: bold;
+        }
+
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            font-style: italic;
+            color: #888;
+        }
+
+        /* Estilo para los corazones flotantes */
+        .floating-heart {
+            position: absolute;
+            color: #ff2e63;
+            font-size: 20px;
+            animation: float 5s infinite ease-in;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart-bg" id="heartContainer"></div>
+
+    <div class="card">
+        <h1>Para Estefani</h1>
+        <p>
+            En este San Valentín, quería decirte algo que a veces las palabras no alcanzan a explicar. 
+            Desde que llegaste a mi vida, todo tiene un brillo diferente, más intenso y más real.
+        </p>
+        <p>
+            Me encanta tu mirada, tu fuerza y esa forma única que tienes de ser tú. Eres mi persona favorita, 
+            mi refugio y mi alegría más grande. Gracias por compartir tu tiempo y tu corazón conmigo.
+        </p>
+        <p>
+            No importa cuánto tiempo pase, siempre elegiría volver a encontrarte. 
+            <br>
+            <span class="highlight">Te amo, Estefani.</span>
+        </p>
+        
+        <div class="footer">
+            Con todo mi amor, hoy y siempre. ❤️
+        </div>
+    </div>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.getElementById('heartContainer').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+    </script>
+</body>
+</html>

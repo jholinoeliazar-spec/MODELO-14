@@ -22,16 +22,45 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden; /* Evita scroll en móvil */
+            position: relative; /* Necesario para los corazones flotantes */
         }
+
+        /* --- ESTILOS DE CORAZONES FLOTANTES (MARCA DE AGUA) --- */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 64, 129, 0.2); /* Color hot-pink con transparencia baja */
+            font-size: 20px;
+            pointer-events: none; /* No interfieren con los clics */
+            z-index: 0;
+            animation: float-up linear forwards;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(110vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        /* ----------------------------------------------------- */
 
         h1 {
             font-family: 'Pacifico', cursive;
             color: var(--wine);
             font-size: 2.2rem;
             margin: 10px 0;
+            z-index: 10;
         }
 
-        /* Contenedor del Tiempo circular */
         .timer-container {
             position: relative;
             width: 80px;
@@ -40,6 +69,7 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
+            z-index: 10;
         }
 
         #timer-text {
@@ -48,31 +78,22 @@
             color: var(--wine);
         }
 
-        /* Cuadrícula armónica */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 columnas para simetría central */
-            gap: 15px;
-            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
             max-width: 350px;
+            padding: 10px;
+            z-index: 10; /* Asegura que las cartas estén sobre los corazones */
         }
 
-        /* Cartas Circulares */
         .card {
             width: 95px;
             height: 95px;
             position: relative;
             perspective: 1000px;
             cursor: pointer;
-        }
-
-        /* Para el último elemento y que quede centrado si son 10 cartas */
-        /* Ajustaremos a 4x3 quitando 2 esquinas o dejando 10 cartas centradas */
-        .grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
         }
 
         .card-inner {
@@ -92,7 +113,7 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 50%; /* FORMA CIRCULAR */
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -107,7 +128,7 @@
         }
 
         .front img {
-            width: 110%; /* Un poco más grande para llenar el círculo */
+            width: 110%;
             height: 110%;
             object-fit: cover;
         }
@@ -122,7 +143,6 @@
             content: '❤';
         }
 
-        /* Animación de derrota */
         .game-over {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -133,6 +153,8 @@
             justify-content: center;
             color: white;
             z-index: 100;
+            padding: 20px;
+            text-align: center;
         }
 
         .btn {
@@ -144,11 +166,13 @@
             font-weight: bold;
             margin-top: 20px;
             font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <a href="not.html">PRUEBA</a>
     <h1>Memory Love</h1>
 
     <div class="timer-container">
@@ -159,7 +183,9 @@
 
     <div id="gameOver" class="game-over">
         <h2 id="msg">¡Tiempo agotado! 💔</h2>
-        <button class="btn" onclick="initGame()">Intentar de nuevo</button>
+        <div id="btnContainer">
+            <button class="btn" onclick="initGame()">Intentar de nuevo</button>
+        </div>
     </div>
 
     <script>
@@ -177,11 +203,29 @@
         let timer;
         let isPlaying = false;
 
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 7000);
+        }
+
+        setInterval(createFloatingHeart, 500);
+
         function initGame() {
             const grid = document.getElementById('gameGrid');
             const overlay = document.getElementById('gameOver');
+            const btnContainer = document.getElementById('btnContainer');
+            
             grid.innerHTML = '';
             overlay.style.display = 'none';
+            // Restaurar botón por defecto
+            btnContainer.innerHTML = '<button class="btn" onclick="initGame()">Intentar de nuevo</button>';
+            
             flippedCards = [];
             matchedCount = 0;
             timeLeft = 30;
@@ -224,11 +268,9 @@
 
         function flipCard(card, id) {
             if (!isPlaying || flippedCards.length >= 2 || card.classList.contains('flipped')) return;
-
             card.classList.add('flipped');
             card.dataset.id = id;
             flippedCards.push(card);
-
             if (flippedCards.length === 2) {
                 checkMatch();
             }
@@ -254,8 +296,18 @@
             clearInterval(timer);
             const overlay = document.getElementById('gameOver');
             const msg = document.getElementById('msg');
+            const btnContainer = document.getElementById('btnContainer');
+            
             overlay.style.display = 'flex';
-            msg.textContent = win ? "¡Ganaste con el corazón! 💖" : "¡Tiempo agotado! 💔";
+            
+            if (win) {
+                msg.textContent = "¡Felicidades mi amor! Pasaste la prueba de nuestro amor 💖";
+                // Aquí cambias 'tu-url-aqui.html' por la dirección de tu otra web
+                btnContainer.innerHTML = '<a href="item_07.html" class="btn">Ver tu sorpresa ❤️</a>';
+            } else {
+                msg.textContent = "¡Tiempo agotado! 💔";
+                btnContainer.innerHTML = '<button class="btn" onclick="initGame()">Intentar de nuevo</button>';
+            }
         }
 
         initGame();
