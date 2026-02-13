@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Niebla del Amor - Versión Final</title>
+    <title>Niebla del Amor - Estefani</title>
     <style>
         :root { --pink: #ffafcc; --crimson: #a4133c; }
         body { 
@@ -21,40 +20,23 @@
             display: flex; align-items: center; justify-content: center; font-size: 24px;
         }
         .btn:active { background: var(--crimson); }
-        #victory { 
+        #victory, #gameover { 
             position: absolute; background: rgba(0,0,0,0.9); padding: 20px; 
             border: 2px solid var(--pink); border-radius: 15px; text-align: center; display: none; z-index: 20;
         }
+        .time-warning { color: #ff0000; animation: blink 0.5s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
-    <!DOCTYPE html>
-<html>
-<head>
-  <title>Mi página</title>
-</head>
 
-<body>
-<a href="item_05.html"><button>Presiona aqui amor si ya jugaste</button></a>
-  <!-- AQUÍ copias TODO -->
-  <audio id="musica" src="audio_02.mp3" loop></audio>
+    <a href="item_05.html"><button style="margin-bottom: 10px; padding: 10px; border-radius: 10px; border: none; background: var(--pink); font-weight: bold;">Presiona aquí si ya jugaste ❤️</button></a>
+    
+    <audio id="musica" src="audio_02.mp3" loop></audio>
 
-  <script>
-  function iniciarAudio() {
-    const audio = document.getElementById("musica");
-    audio.play();
-    document.removeEventListener("click", iniciarAudio);
-    document.removeEventListener("touchstart", iniciarAudio);
-  }
-
-  document.addEventListener("click", iniciarAudio);
-  document.addEventListener("touchstart", iniciarAudio);
-  </script>
-  <!-- FIN -->
-    <!-- ------------------ -->
     <div id="ui">
-        <span id="t">00:00</span>
-        <span id="h">❤️ 0/5</span>
+        <span id="t">Tiempo: 40s</span>
+        <span id="h">❤️ 0/6</span>
     </div>
 
     <canvas id="g"></canvas>
@@ -62,7 +44,13 @@
     <div id="victory">
         <h2>¡Amor Encontrado! 🐧💖</h2>
         <p id="vt"></p>
-        <button onclick="location.reload()" style="padding: 10px; background: var(--crimson); color: white; border: none; border-radius: 5px;">Reintentar</button>
+        <button onclick="location.reload()" style="padding: 10px; background: var(--crimson); color: white; border: none; border-radius: 5px;">Jugar de nuevo</button>
+    </div>
+
+    <div id="gameover">
+        <h2>¡Se acabó el tiempo! 💔</h2>
+        <p>¡Vuelve a intentarlo por ella!</p>
+        <button onclick="location.reload()" style="padding: 10px; background: var(--pink); color: black; border: none; border-radius: 5px;">Reintentar</button>
     </div>
 
     <div class="controls">
@@ -96,20 +84,31 @@
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ];
 
+    let timeLeft = 40;
     let p = { x: 15, y: 45, vx: 0, vy: 0, r: 8, hrts: 0, light: 75 };
-    
-    // CORRECCIÓN FINAL DE CORAZONES (Coordenadas manuales verificadas en el mapa 0)
+    let particles = [];
+    // Frases: La primera es ahora su nombre
+    const frases = ["ESTEFANI", "ERES MI VIDA", "MI ETERNO AMOR", "MI PASIÓN", "MI CORAZÓN", "MI LOCURA BONITA"];
+
     let hearts = [
-        {x: 3*C+15, y: 1*C+15, a:true}, // Camino superior
-        {x: 1*C+15, y: 5*C+15, a:true}, // Pasillo izquierdo libre
-        {x: 7*C+15, y: 3*C+15, a:true}, // Centro arriba
-        {x: 13*C+15, y: 1*C+15, a:true}, // Esquina superior derecha
-        {x: 9*C+15, y: 13*C+15, a:true}  // Cerca del final
+        {x: 1*C+15, y: 1*C+15, a:true}, // Corazón inicial (Nombre)
+        {x: 3*C+15, y: 1*C+15, a:true},
+        {x: 1*C+15, y: 5*C+15, a:true},
+        {x: 7*C+15, y: 3*C+15, a:true},
+        {x: 13*C+15, y: 1*C+15, a:true},
+        {x: 9*C+15, y: 13*C+15, a:true}
     ];
 
     let keys = {};
-    let start = Date.now();
-    let win = false;
+    let win = false, gameOver = false;
+
+    function iniciarAudio() {
+        document.getElementById("musica").play();
+        document.removeEventListener("click", iniciarAudio);
+        document.removeEventListener("touchstart", iniciarAudio);
+    }
+    document.addEventListener("click", iniciarAudio);
+    document.addEventListener("touchstart", iniciarAudio);
 
     const setup = (id, k) => {
         const b = document.getElementById(id);
@@ -117,20 +116,71 @@
         b.ontouchend = (e) => { e.preventDefault(); keys[k] = false; };
     };
     setup('up','w'); setup('down','s'); setup('left','a'); setup('right','d');
-    
-    window.onkeydown = (e) => { 
-        if(e.key.includes('Arrow')) keys[e.key[5].toLowerCase()] = true; 
-        else keys[e.key] = true;
-    };
-    window.onkeyup = (e) => {
-        if(e.key.includes('Arrow')) keys[e.key[5].toLowerCase()] = false;
-        else keys[e.key] = false;
-    };
+    window.onkeydown = (e) => { keys[e.key.includes('Arrow') ? e.key[5].toLowerCase() : e.key] = true; };
+    window.onkeyup = (e) => { keys[e.key.includes('Arrow') ? e.key[5].toLowerCase() : e.key] = false; };
 
     function isWall(x, y) {
         let gx = Math.floor(x / C), gy = Math.floor(y / C);
-        if (gx < 0 || gx >= SZ || gy < 0 || gy >= SZ) return true;
-        return maze[gy][gx] === 1;
+        return (gx < 0 || gx >= SZ || gy < 0 || gy >= SZ || maze[gy][gx] === 1);
+    }
+
+    function createExplosion(x, y, texto) {
+        // Partículas decorativas
+        for(let i=0; i<12; i++) {
+            particles.push({
+                x, y, 
+                vx: (Math.random()-0.5)*3, 
+                vy: (Math.random()-0.5)*3, 
+                life: 1.0, 
+                text: "" 
+            });
+        }
+        // Partícula especial para el texto (dura más tiempo y sube lento)
+        particles.push({
+            x, y, vx: 0, vy: -0.4, life: 2.5, text: texto 
+        });
+    }
+
+    function update() {
+        if(win || gameOver) return;
+        timeLeft -= 1/60;
+        if(timeLeft <= 0) { gameOver = true; document.getElementById('gameover').style.display = 'block'; }
+
+        let speed = 2.5;
+        let nextVX = 0, nextVY = 0;
+        if(keys['w'] || keys['u']) nextVY = -speed;
+        if(keys['s'] || keys['d']) nextVY = speed;
+        if(keys['a'] || keys['l']) nextVX = -speed;
+        if(keys['d'] || keys['r']) nextVX = speed;
+
+        if(!isWall(p.x + nextVX + (nextVX > 0 ? p.r : -p.r), p.y)) p.x += nextVX;
+        if(!isWall(p.x, p.y + nextVY + (nextVY > 0 ? p.r : -p.r))) p.y += nextVY;
+
+        hearts.forEach((h, i) => {
+            if(h.a && Math.hypot(p.x-h.x, p.y-h.y) < 15) { 
+                h.a = false; 
+                p.hrts++; 
+                p.light += 20; 
+                timeLeft += 5; 
+                createExplosion(h.x, h.y, frases[p.hrts-1]); 
+            }
+        });
+
+        if(p.x > 420 && p.y > 400) {
+            win = true;
+            document.getElementById('victory').style.display = 'block';
+            document.getElementById('vt').innerText = "¡Has llegado al final con todo mi amor!";
+        }
+
+        document.getElementById('t').innerText = "Tiempo: " + Math.ceil(timeLeft) + "s";
+        document.getElementById('h').innerText = "❤️ " + p.hrts + "/6";
+
+        particles.forEach(pa => { 
+            pa.x += pa.vx; pa.y += pa.vy; 
+            // El texto desaparece más lento que las chispas
+            pa.life -= pa.text ? 0.008 : 0.02; 
+        });
+        particles = particles.filter(pa => pa.life > 0);
     }
 
     function drawPenguin(x, y, bellyColor, hasBow) {
@@ -150,41 +200,28 @@
         }
     }
 
-    function update() {
-        if(win) return;
-        let speed = 2.5;
-        let nextVX = 0, nextVY = 0;
-        if(keys['w'] || keys['u']) nextVY = -speed;
-        if(keys['s'] || keys['d']) nextVY = speed;
-        if(keys['a'] || keys['l']) nextVX = -speed;
-        if(keys['d'] || keys['r']) nextVX = speed;
-
-        if(!isWall(p.x + nextVX + (nextVX > 0 ? p.r : -p.r), p.y)) p.x += nextVX;
-        if(!isWall(p.x, p.y + nextVY + (nextVY > 0 ? p.r : -p.r))) p.y += nextVY;
-
-        hearts.forEach(h => {
-            if(h.a && Math.hypot(p.x-h.x, p.y-h.y) < 15) { h.a = false; p.hrts++; p.light += 25; }
-        });
-
-        if(p.x > 420 && p.y > 400) {
-            win = true;
-            document.getElementById('victory').style.display = 'block';
-            document.getElementById('vt').innerText = "¡Los pingüinos se han reunido!";
-        }
-
-        document.getElementById('t').innerText = Math.floor((Date.now()-start)/1000) + "s";
-        document.getElementById('h').innerText = "❤️ " + p.hrts + "/5";
-    }
-
     function draw() {
         ctx.fillStyle = '#1a0011'; ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.fillStyle = '#4a0e2e';
         for(let y=0;y<SZ;y++) for(let x=0;x<SZ;x++) if(maze[y][x]) ctx.fillRect(x*C,y*C,C,C);
 
-        drawPenguin(435, 405, "#a2d2ff", false); // Macho Azul
-        drawPenguin(p.x, p.y, "#ffc2d1", true);   // Hembra Rosa
+        drawPenguin(435, 405, "#a2d2ff", false); 
+        drawPenguin(p.x, p.y, "#ffc2d1", true);   
 
         hearts.forEach(h => { if(h.a) { ctx.font="14px Arial"; ctx.fillText("❤️", h.x-7, h.y+5); }});
+
+        particles.forEach(pa => {
+            if(pa.text) {
+                ctx.fillStyle = `rgba(255, 175, 204, ${pa.life})`;
+                ctx.font = "bold 18px sans-serif";
+                ctx.shadowBlur = 5; ctx.shadowColor = "white";
+                ctx.fillText(pa.text, pa.x - (pa.text.length * 4), pa.y);
+                ctx.shadowBlur = 0;
+            } else {
+                ctx.fillStyle = `rgba(255, 255, 255, ${pa.life})`;
+                ctx.fillRect(pa.x, pa.y, 2, 2);
+            }
+        });
 
         let grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.light);
         grad.addColorStop(0, 'transparent');

@@ -1,35 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: sans-serif; margin: 0; background: #222; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background: #ffecf2; /* Fondo rosa suave */
+            display: flex;
+            justify-content: center;
+        }
         .app-container { 
             width: 100%; 
             max-width: 360px; 
-            margin: auto; 
             background: white; 
             min-height: 100vh; 
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
+        h1 { color: #d63384; font-size: 1.5rem; }
+        p { color: #555; line-height: 1.6; }
+        img { border-radius: 15px; margin: 20px 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        button {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover { transform: scale(1.05); background: #c9184a; }
+        .heart { color: #ff4d6d; }
     </style>
-    <title>SAN VALENTIN</title>
+    <title>Feliz San Valentín</title>
     <link rel="shortcut icon" href="amor.png">
 </head>
 <body>
     <div class="app-container">
-        <h1>Feliz Cumpleaños Estefani! <br>
-         🎂 💜💜💜</h1>
-    <p>La profe de Educación Física más increíble
-y el amor de mi vida 💕
-</p>
-<p>
-    Preparé un juego especial para ti. Responde las preguntas y descubre tu sorpresa final...
+        <h1>¡Feliz San Valentín, Estefani! <br>
+        <span class="heart">❤️🌹✨</span></h1>
+        
+        <p>A la profe de Educación Física que hace que mi corazón lata a mil por hora. 🏃‍♀️💓</p>
+        
+        <p>
+            Eres el amor de mi vida y hoy quiero celebrar lo especial que eres para mí. 
+            Preparé un desafío a la altura de una experta como tú...
+        </p>
 
-</p>
-<img src="img_03.jpeg" width="200">
-<a href="item_02.html"><button>COMENZAR EL JUEGO</button></a>
+        <img src="img_03.jpeg" width="250" alt="Nuestra foto">
+
+        <p>¿Lista para poner a prueba tus sentimientos?</p>
+        
+        <a href="item_02.html">
+            <button>EMPEZAR EL DESAFÍO DEL AMOR</button>
+        </a>
     </div>
-    
 </body>
 </html>
