@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz San Valentín ❤️</title>
+    <title>Para Estefani ❤️</title>
     <style>
         :root {
-            --rosa-suave: #ffafbd;
-            --rojo-pasion: #ff4b2b;
-            --blanco: #fff0f3;
+            --primary: #d63384;
+            --rose-gold: #e5b3b3;
+            --soft-white: #ffffff;
+            --text-color: #4a4a4a;
         }
 
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             margin: 0; 
-            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            background: radial-gradient(circle at center, #fff5f7 0%, #ffe4e9 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,146 +24,128 @@
             position: relative;
         }
 
-        /* Contenedor principal de la App */
+        /* Contenedor Elegante con Efecto Vidrio */
         .app-container {             
-            width: 90%;
-            max-width: 360px; 
-            background: rgba(255, 255, 255, 0.9); 
-            padding: 40px 20px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 340px; 
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(10px);
+            padding: 50px 30px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
             text-align: center;
-            border: 2px solid white;
+            border: 1px solid rgba(255, 255, 255, 0.8);
             position: relative;
             z-index: 10;
         }
 
         h1 {
-            color: var(--rojo-pasion);
-            font-size: 2rem;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            color: var(--text-color);
+            font-size: 1.6rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
 
         .heart-main {
-            color: var(--rojo-pasion);
-            font-size: 50px;
-            animation: heartbeat 1.2s infinite;
-            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 40px;
+            margin-bottom: 20px;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(214, 51, 132, 0.2));
+            animation: softPulse 2s ease-in-out infinite;
         }
 
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.3); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
+        @keyframes softPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        p {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+            font-weight: 300;
         }
 
         .btn-comenzar {
-            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            background: var(--text-color);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 50px;
+            padding: 18px 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            border-radius: 12px;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
-            margin-bottom: 30px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .btn-comenzar:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.6);
+            transform: translateY(-5px);
+            background: var(--primary);
+            box-shadow: 0 10px 20px rgba(214, 51, 132, 0.2);
         }
 
-        /* Corazones flotantes de fondo (Marca de agua) */
-        .floating-hearts-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; overflow: hidden; z-index: 0;
-        }
-
+        /* Partículas de Corazón Sutiles */
         .heart-bg {
             position: absolute;
-            font-size: 20px;
-            color: rgba(255, 255, 255, 0.4);
-            opacity: 0;
-            animation: floatAndFade 8s linear infinite;
+            color: var(--primary);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 15s linear infinite;
         }
 
-        @keyframes floatAndFade {
-            0% { transform: translateY(105vh) scale(0.5); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.3; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
         }
-
-        /* Posiciones variadas para los corazones de fondo */
-        .heart-bg:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .heart-bg:nth-child(2) { left: 25%; animation-delay: 2s; }
-        .heart-bg:nth-child(3) { left: 45%; animation-delay: 4s; }
-        .heart-bg:nth-child(4) { left: 65%; animation-delay: 1s; }
-        .heart-bg:nth-child(5) { left: 85%; animation-delay: 3s; }
-        .heart-bg:nth-child(6) { left: 15%; animation-delay: 5s; }
 
         .sticker-img {
-            display: block;
-            margin: 0 auto;
-            border-radius: 15px;
+            margin-top: 40px;
+            opacity: 0.9;
+            filter: grayscale(20%);
+            transition: opacity 0.3s;
         }
     </style>
 </head>
 <body>
 
-    <div class="floating-hearts-container">
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-        <span class="heart-bg">❤️</span>
-    </div>
+    <script>
+        for (let i = 0; i < 8; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart-bg';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            heart.style.animationDelay = (Math.random() * 5) + 's';
+            heart.style.fontSize = (Math.random() * 10 + 10) + 'px';
+            document.body.appendChild(heart);
+        }
+    </script>
 
     <div class="app-container">
-        <div class="heart-main">❤️</div>
-        <h1>¡BIENVENIDA!</h1>
-        <br>
-        <br>
-        
-        <p style="color: #666; margin-bottom: 25px;">Tengo algo especial para ti...</p>
+        <div class="heart-main">♥</div>
+        <h1>Bienvenida</h1>
+        <p><em>Una pequeña historia para ti...</em></p>
         
         <a href="item_01.html" class="btn-comenzar">COMENZAR</a>
         
         <div class="sticker-wrapper">
-            <br>
-            <br>
-            <br>
-            <br>
-            <img src="sticker_01.webp" id="miSticker" class="sticker-img" width="120">
-            <br>
-            <br>
-            
-        
+            <img src="sticker_01.webp" id="miSticker" class="sticker-img" width="100">
         </div>
     </div>
 
     <script>
         const sticker = document.getElementById('miSticker');
-        
-        // Esta función "refresca" la imagen para que vuelva a empezar
         function reiniciarAnimacion() {
             const rutaLimpia = sticker.src.split('?')[0]; 
-            // Agregamos un parámetro único para obligar al navegador a reiniciar
             sticker.src = rutaLimpia + '?t=' + new Date().getTime();
         }
-
-        // AJUSTE AQUÍ: Cambia el 3000 por la duración de tu sticker en milisegundos
-        // Ejemplo: Si el sticker dura 3 segundos, deja 3000.
         setInterval(reiniciarAnimacion, 3000); 
     </script>
 
