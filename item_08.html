@@ -6,10 +6,10 @@
     <title>SAN VALENTÍN</title>
     <link rel="shortcut icon" href="amor.png">
     <style>
-        /* CONFIGURACIÓN RÁPIDA */
         :root {
-            --ajuste-altura: 2%; /* Sube o baja los botones (10% es más abajo, 20% más arriba) */
-            --escala-global: 0.85; /* Tamaño de los botones y reproductor */
+            --ajuste-altura: 5%; 
+            --escala-global: 0.85; 
+            --color-purpura: #e32236; /* Púrpura elegante */
         }
 
         * {
@@ -24,28 +24,24 @@
             height: 100%;
             background: #000; 
             font-family: 'Segoe UI', sans-serif;
-            overflow: hidden; /* Evita el scroll raro en móviles */
+            overflow: hidden; 
         }
 
         .app-container { 
             width: 100%; 
-            height: 100%; /* Ocupa todo el alto disponible */
+            height: 100%; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end; /* Alinea contenido abajo */
-            
-            /* IMAGEN FULL PANTALLA */
+            justify-content: flex-end; 
             background-image: url("img_12.png"); 
-            background-size: cover; /* Cubre todo sin dejar bordes negros */
+            background-size: cover; 
             background-position: center center;
             background-repeat: no-repeat;
-            
             padding-bottom: var(--ajuste-altura);
             position: relative;
         }
 
-        /* Contenedor para agrupar botones y que no se pierdan */
         .controls-wrapper {
             display: flex;
             flex-direction: column;
@@ -55,74 +51,104 @@
             z-index: 10;
         }
 
-        /* Reproductor Minimalista */
         #audioContainer {
             width: 280px;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.1);
             padding: 6px 12px;
             border-radius: 20px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
         }
 
         audio {
             height: 30px;
             width: 100%;
-            filter: invert(1) opacity(0.7); /* Estilo limpio */
+            filter: invert(1) opacity(0.4); 
         }
 
-        /* Botón MI LUGAR */
-        .btn-restart {
-            background: #ffffff;
-            color: #ff4081;
+        /* Botón TE AMO Mediano y Púrpura */
+        .btn-te-amo {
+            display: inline-block;
+            opacity: 0;
+            visibility: hidden;
+            background: var(--color-purpura);
+            color: #ffffff;
             border: none;
-            padding: 14px 35px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 800;
+            /* Tamaño mediano ajustado */
+            padding: 12px 35px; 
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 700;
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
+            letter-spacing: 3px;
+            box-shadow: 0 0 15px rgba(234, 5, 101, 0.4);
+            transition: opacity 1.5s ease, visibility 1.5s ease;
         }
 
-        .btn-restart:active {
-            transform: scale(0.95);
+        /* Activación con Latido Púrpura */
+        .btn-visible {
+            opacity: 1;
+            visibility: visible;
+            animation: purplePulse 2s infinite;
         }
 
-        /* Home ultra discreto */
-        .btn-home {
-            position: absolute;
-            top: env(safe-area-inset-top, 20px); /* Ajuste para notch de iPhone */
-            right: 20px;
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            font-size: 10px;
-            letter-spacing: 2px;
-            font-weight: bold;
+        /* Animación de latido con brillo (glow) */
+        @keyframes purplePulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(233, 7, 7, 0.4);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 25px rgba(231, 106, 108, 0.7);
+                background: #f40126; /* Se aclara un poco al latir */
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(227, 98, 98, 0.4);
+            }
+        }
+
+        .btn-te-amo:active {
+            transform: scale(0.92) !important;
+            filter: brightness(0.8);
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- <a href="index.html" class="btn-home">HOME</a> -->
-
         <div class="controls-wrapper">
             <div id="audioContainer">
-                <audio controls>
+                <audio id="miMusica" controls>
                     <source src="audio_01.mp3" type="audio/mpeg">
                 </audio>
             </div>
 
-            <a href="index.html" class="btn-restart">
-                MI LUGAR
+            <a href="index.html" id="botonSecreto" class="btn-te-amo">
+                TE AMO
             </a>
         </div>
     </div>
 
+    <script>
+        const audio = document.getElementById('miMusica');
+        const boton = document.getElementById('botonSecreto');
+
+        audio.ontimeupdate = function() {
+            if (audio.duration) {
+                const tiempoRestante = audio.duration - audio.currentTime;
+
+                if (tiempoRestante <= 5) {
+                    boton.classList.add('btn-visible');
+                } else {
+                    boton.classList.remove('btn-visible');
+                }
+            }
+        };
+    </script>
 </body>
 </html>

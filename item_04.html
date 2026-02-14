@@ -26,11 +26,25 @@
         }
         .time-warning { color: #ff0000; animation: blink 0.5s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
+        
+        /* Estilo para el mensaje motivador superior */
+        .msg-motivador {
+            margin-bottom: 10px; 
+            padding: 10px 20px; 
+            border-radius: 20px; 
+            background: rgba(255, 175, 204, 0.15); 
+            border: 1px solid var(--pink);
+            color: var(--pink);
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
 
-    <a href="item_05.html"><button style="margin-bottom: 10px; padding: 10px; border-radius: 10px; border: none; background: var(--pink); font-weight: bold;">Presiona aquí si ya jugaste ❤️</button></a>
+    <div class="msg-motivador">Encuentra el camino</div>
     
     <audio id="musica" src="audio_02.mp3" loop></audio>
 
@@ -44,7 +58,9 @@
     <div id="victory">
         <h2>¡Amor Encontrado! 🐧💖🐧</h2>
         <p id="vt"></p>
-        <button onclick="location.reload()" style="padding: 10px; background: var(--crimson); color: white; border: none; border-radius: 5px;">Jugar de nuevo</button>
+        <a href="item_05.html" style="text-decoration: none;">
+            <button style="padding: 12px 20px; background: var(--crimson); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Ver tu recompensa ❤️</button>
+        </a>
     </div>
 
     <div id="gameover">
@@ -87,11 +103,10 @@
     let timeLeft = 40;
     let p = { x: 15, y: 45, vx: 0, vy: 0, r: 8, hrts: 0, light: 75 };
     let particles = [];
-    // Frases: La primera es ahora su nombre
     const frases = ["ESTEFANI", "ERES MI VIDA", "MI ETERNO AMOR", "MI PASIÓN", "MI CORAZÓN", "MI LOCURA BONITA"];
 
     let hearts = [
-        {x: 1*C+15, y: 1*C+15, a:true}, // Corazón inicial (Nombre)
+        {x: 1*C+15, y: 1*C+15, a:true},
         {x: 3*C+15, y: 1*C+15, a:true},
         {x: 1*C+15, y: 5*C+15, a:true},
         {x: 7*C+15, y: 3*C+15, a:true},
@@ -125,7 +140,6 @@
     }
 
     function createExplosion(x, y, texto) {
-        // Partículas decorativas
         for(let i=0; i<12; i++) {
             particles.push({
                 x, y, 
@@ -135,7 +149,6 @@
                 text: "" 
             });
         }
-        // Partícula especial para el texto (dura más tiempo y sube lento)
         particles.push({
             x, y, vx: 0, vy: -0.4, life: 2.5, text: texto 
         });
@@ -177,7 +190,6 @@
 
         particles.forEach(pa => { 
             pa.x += pa.vx; pa.y += pa.vy; 
-            // El texto desaparece más lento que las chispas
             pa.life -= pa.text ? 0.008 : 0.02; 
         });
         particles = particles.filter(pa => pa.life > 0);
