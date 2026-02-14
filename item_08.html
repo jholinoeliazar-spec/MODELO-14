@@ -2,113 +2,126 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SAN VALENTÍN</title>
     <link rel="shortcut icon" href="amor.png">
     <style>
-        /* CONFIGURACIÓN RÁPIDA AQUÍ */
+        /* CONFIGURACIÓN RÁPIDA */
         :root {
-            --altura-botones: 8%; /* 0% es hasta abajo, 100% es hasta arriba */
-            --escala-boton: 0.9;    /* Tamaño del botón (1.0 es original, 0.8 es más pequeño) */
-            --ancho-reproductor: 260px;
+            --ajuste-altura: 12%; /* Sube o baja los botones (10% es más abajo, 20% más arriba) */
+            --escala-global: 0.85; /* Tamaño de los botones y reproductor */
         }
 
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html { 
             margin: 0; 
-            background: #1a1a1a; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #000; 
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; /* Evita el scroll raro en móviles */
         }
 
         .app-container { 
             width: 100%; 
-            max-width: 360px; 
-            height: 100vh;
-            /* background-size: contain asegura que la imagen se vea COMPLETA */
-            background-image: url("img_12.png"); 
-            background-size: contain; 
-            background-repeat: no-repeat;
-            background-position: center;
-            position: relative;
+            height: 100%; /* Ocupa todo el alto disponible */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end; 
-            padding-bottom: var(--altura-botones);
-            box-sizing: border-box;
+            justify-content: flex-end; /* Alinea contenido abajo */
+            
+            /* IMAGEN FULL PANTALLA */
+            background-image: url("img_12.png"); 
+            background-size: cover; /* Cubre todo sin dejar bordes negros */
+            background-position: center center;
+            background-repeat: no-repeat;
+            
+            padding-bottom: var(--ajuste-altura);
+            position: relative;
         }
 
-        /* Estilo Minimalista para el Audio */
+        /* Contenedor para agrupar botones y que no se pierdan */
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            transform: scale(var(--escala-global));
+            z-index: 10;
+        }
+
+        /* Reproductor Minimalista */
         #audioContainer {
-            width: var(--ancho-reproductor);
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 10px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-            transform: scale(var(--escala-boton));
+            width: 280px;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 6px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
         }
 
         audio {
-            height: 28px;
+            height: 30px;
             width: 100%;
-            filter: invert(1) hue-rotate(180deg) opacity(0.6); /* Estilo dark/minimal */
+            filter: invert(1) opacity(0.7); /* Estilo limpio */
         }
 
-        /* Botón Minimalista "MI LUGAR" */
+        /* Botón MI LUGAR */
         .btn-restart {
-            background: white;
-            color: #e91e63;
+            background: #ffffff;
+            color: #ff4081;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
+            padding: 14px 35px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 800;
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            transform: scale(var(--escala-boton));
+            letter-spacing: 1.5px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
         }
 
-        .btn-restart:hover {
-            background: #fce4ec;
-            transform: scale(calc(var(--escala-boton) + 0.05));
+        .btn-restart:active {
+            transform: scale(0.95);
         }
 
-        /* Home ultra minimal */
+        /* Home ultra discreto */
         .btn-home {
             position: absolute;
-            top: 25px;
-            right: 25px;
-            color: rgba(255,255,255,0.4);
+            top: env(safe-area-inset-top, 20px); /* Ajuste para notch de iPhone */
+            right: 20px;
+            color: rgba(255,255,255,0.5);
             text-decoration: none;
             font-size: 10px;
             letter-spacing: 2px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- <a href="index.html" class="btn-home">HOME</a> -->
+        <a href="index.html" class="btn-home">HOME</a>
 
-        <div id="audioContainer">
-            <audio controls>
-                <source src="audio_01.mp3" type="audio/mpeg">
-            </audio>
+        <div class="controls-wrapper">
+            <div id="audioContainer">
+                <audio controls>
+                    <source src="audio_01.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <a href="index.html" class="btn-restart">
+                MI LUGAR
+            </a>
         </div>
-
-        <a href="index.html" class="btn-restart">
-            MI LUGAR
-        </a>
     </div>
 
 </body>
