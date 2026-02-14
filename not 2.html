@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAN VALENTÍN</title>
+    <link rel="shortcut icon" href="amor.png">
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background: #fce4ec; /* Fondo rosa suave de respaldo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container { 
+            width: 100%; 
+            max-width: 400px; 
+            height: 100vh;
+            /* Usamos la imagen que generamos como fondo principal */
+            background-image: url("img_12.png"); 
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Estilo para el botón principal "Volver a vivir" */
+        .btn-restart {
+            margin-top: auto;
+            margin-bottom: 100px;
+            background: linear-gradient(135deg, #d81b60, #ff4081);
+            color: white;
+            border: 2px solid #fff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s, background 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-restart:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #ff4081, #d81b60);
+        }
+
+        /* Contenedor del Audio Estilizado */
+        #audioContainer {
+            position: absolute;
+            bottom: 30px;
+            width: 80%;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid #f8bbd0;
+            display: flex;
+            justify-content: center;
+        }
+
+        audio {
+            height: 35px;
+            filter: sepia(20%) saturate(150%) hue-rotate(300deg); /* Le da un toque rosado al reproductor */
+        }
+
+        /* Botón HOME pequeño */
+        .btn-home {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(189, 189, 189, 0.8);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- <a href="index.html" class="btn-home">HOME</a> -->
+
+        <a href="index.html" class="btn-restart">
+            ✨ Volver a vivir el amor
+        </a>
+
+        <div id="audioContainer">
+            <audio controls>
+                <source src="audio_01.mp3" type="audio/mpeg">
+                Tu navegador no soporta audio.
+            </audio>
+        </div>
+    </div>
+
+</body>
+</html>
