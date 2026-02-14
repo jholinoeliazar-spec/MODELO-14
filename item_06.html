@@ -21,16 +21,15 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            overflow: hidden; /* Evita scroll en móvil */
-            position: relative; /* Necesario para los corazones flotantes */
+            overflow: hidden; 
+            position: relative; 
         }
 
-        /* --- ESTILOS DE CORAZONES FLOTANTES (MARCA DE AGUA) --- */
         .bg-heart {
             position: absolute;
-            color: rgba(255, 64, 129, 0.2); /* Color hot-pink con transparencia baja */
+            color: rgba(255, 64, 129, 0.2); 
             font-size: 20px;
-            pointer-events: none; /* No interfieren con los clics */
+            pointer-events: none; 
             z-index: 0;
             animation: float-up linear forwards;
         }
@@ -51,7 +50,6 @@
                 opacity: 0;
             }
         }
-        /* ----------------------------------------------------- */
 
         h1 {
             font-family: 'Pacifico', cursive;
@@ -85,7 +83,7 @@
             gap: 12px;
             max-width: 350px;
             padding: 10px;
-            z-index: 10; /* Asegura que las cartas estén sobre los corazones */
+            z-index: 10; 
         }
 
         .card {
@@ -170,10 +168,19 @@
             text-decoration: none;
             display: inline-block;
         }
+
+        /* Música escondida */
+        #bg-music {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>Memory Love</h1>
+
+    <audio id="bg-music" loop autoplay>
+        <source src="audio_05.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="timer-container">
         <span id="timer-text">30</span>
@@ -202,6 +209,7 @@
         let timeLeft = 30;
         let timer;
         let isPlaying = false;
+        let musicStarted = false;
 
         function createFloatingHeart() {
             const heart = document.createElement('div');
@@ -223,7 +231,6 @@
             
             grid.innerHTML = '';
             overlay.style.display = 'none';
-            // Restaurar botón por defecto
             btnContainer.innerHTML = '<button class="btn" onclick="initGame()">Intentar de nuevo</button>';
             
             flippedCards = [];
@@ -248,7 +255,14 @@
                         <div class="face back"></div>
                     </div>
                 `;
-                card.onclick = () => flipCard(card, data.id);
+                card.onclick = () => {
+                    // Iniciar música al primer clic si el navegador la bloqueó
+                    if(!musicStarted) {
+                        document.getElementById('bg-music').play();
+                        musicStarted = true;
+                    }
+                    flipCard(card, data.id);
+                };
                 grid.appendChild(card);
             });
 
@@ -302,8 +316,6 @@
             
             if (win) {
                 msg.textContent = "¡Felicidades mi amor!💖";
-
-                // Aquí cambias 'tu-url-aqui.html' por la dirección de tu otra web
                 btnContainer.innerHTML = '<a href="item_07.html" class="btn">Ver tu sorpresa ❤️</a>';
             } else {
                 msg.textContent = "¡Tiempo agotado! 💔";
